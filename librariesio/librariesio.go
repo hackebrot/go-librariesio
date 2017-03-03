@@ -85,7 +85,7 @@ type ErrorResponse struct {
 	Message  string `json:"error"`
 }
 
-// Error interface implementation for ErrorRespons
+// Error interface implementation for ErrorResponse
 func (r *ErrorResponse) Error() string {
 	// Make sure to not show api_key
 	q := r.Response.Request.URL.Query()
