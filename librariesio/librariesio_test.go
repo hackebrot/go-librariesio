@@ -1,6 +1,7 @@
 package librariesio
 
 import (
+	"encoding/json"
 	"testing"
 	"time"
 )
@@ -49,6 +50,21 @@ func TestNewRequest_noPayload(t *testing.T) {
 
 	if req.Body != nil {
 		t.Fatalf("request contains a non-nil Body\n%v", req.Body)
+	}
+}
+
+func TestNewRequest_invalidJSON(t *testing.T) {
+	client := NewClient("")
+
+	foo := make(map[interface{}]interface{})
+
+	_, err := client.NewRequest("GET", "pypi/cookiecutter", foo)
+
+	if err == nil {
+		t.Error("Expected error to be returned")
+	}
+	if err, ok := err.(*json.UnsupportedTypeError); !ok {
+		t.Errorf("Expected a JSON error, got %#v", err)
 	}
 }
 
