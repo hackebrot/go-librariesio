@@ -104,6 +104,22 @@ func (r *ErrorResponse) Error() string {
 	)
 }
 
+// CheckResponse checks the API response for errors and returns a ErrorResponse
+// Responses are considered unsuccesful for status code other than 2xx.
+func CheckResponse(resp *http.Response) error {
+	if code := resp.StatusCode; 200 <= code && code <= 299 {
+		return nil
+	}
+
+	errorResponse := &ErrorResponse{Response: resp}
+
+	data, err := ioutil.ReadAll(resp.Body)
+	if err == nil && data != nil {
+		json.Unmarshal(data, errorResponse)
+	}
+	return errorResponse
+}
+
 // Do sends an HTTP request and returns an HTTP response
 func (c *Client) Do(req *http.Request, v interface{}) (*http.Response, error) {
 
@@ -113,17 +129,14 @@ func (c *Client) Do(req *http.Request, v interface{}) (*http.Response, error) {
 	}
 	defer response.Body.Close()
 
+	err = CheckResponse(response)
+	if err != nil {
+		return response, err
+	}
+
 	body, err := ioutil.ReadAll(response.Body)
 	if err != nil {
 		return nil, err
-	}
-
-	if response.StatusCode != http.StatusOK {
-		errorResponse := &ErrorResponse{Response: response}
-		if body != nil {
-			json.Unmarshal(body, errorResponse)
-		}
-		return response, errorResponse
 	}
 
 	err = json.Unmarshal(body, v)
