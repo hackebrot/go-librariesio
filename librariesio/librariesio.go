@@ -70,13 +70,10 @@ func (c *Client) NewRequest(method, urlStr string, data interface{}) (*http.Requ
 	request.URL.RawQuery = q.Encode()
 
 	request.Header.Set("Accept", mediaType)
+	request.Header.Set("User-Agent", c.UserAgent)
 
 	if data != nil {
 		request.Header.Set("Content-Type", "application/json")
-	}
-
-	if c.UserAgent != "" {
-		request.Header.Set("User-Agent", c.UserAgent)
 	}
 
 	return request, nil
