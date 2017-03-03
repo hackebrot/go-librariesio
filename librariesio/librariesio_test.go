@@ -26,3 +26,16 @@ func TestNewClient(t *testing.T) {
 		t.Errorf("NewClient timeout is %v, want %v", got, want)
 	}
 }
+
+func TestNewRequest_noPayload(t *testing.T) {
+	client := NewClient("")
+	req, err := client.NewRequest("GET", "pypi/cookiecutter", nil)
+
+	if err != nil {
+		t.Fatalf("NewRequest returned error: %v", err)
+	}
+
+	if req.Body != nil {
+		t.Fatalf("request contains a non-nil Body\n%v", req.Body)
+	}
+}
