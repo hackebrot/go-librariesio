@@ -2,11 +2,18 @@ package librariesio
 
 import (
 	"encoding/json"
+	"net/http"
 	"testing"
 	"time"
 )
 
 const APIKey string = "1234"
+
+func checkHeader(t *testing.T, req *http.Request, header string, want string) {
+	if got := req.Header.Get(header); got != want {
+		t.Errorf("Header.Get(%q) returned %q, want %q", header, got, want)
+	}
+}
 
 func TestNewClient(t *testing.T) {
 	c := NewClient(APIKey)
@@ -79,5 +86,46 @@ func TestNewRequest_auth(t *testing.T) {
 	query := req.URL.Query()
 	if got, want := query.Get("api_key"), APIKey; got != want {
 		t.Fatalf("did not set query param to %v, got %v", want, got)
+	}
+}
+
+func TestNewRequest_headers(t *testing.T) {
+	testCases := []struct {
+		name    string
+		body    interface{}
+		headers map[string]string
+	}{
+		{
+			name: "No Content-Type without body",
+			body: nil,
+			headers: map[string]string{
+				"Accept":     "application/json",
+				"User-Agent": "go-librariesio/" + libraryVersion,
+			},
+		},
+		{
+			name: "Content-Type with body",
+			body: "hello world",
+			headers: map[string]string{
+				"Accept":       "application/json",
+				"Content-Type": "application/json",
+				"User-Agent":   "go-librariesio/" + libraryVersion,
+			},
+		},
+	}
+
+	client := NewClient(APIKey)
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+			req, err := client.NewRequest("GET", "pypi/cookiecutter", testCase.body)
+			if err != nil {
+				t.Fatal("unexpected error")
+			}
+
+			for key, value := range testCase.headers {
+				checkHeader(t, req, key, value)
+			}
+		})
 	}
 }
