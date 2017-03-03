@@ -51,3 +51,17 @@ func TestNewRequest_noPayload(t *testing.T) {
 		t.Fatalf("request contains a non-nil Body\n%v", req.Body)
 	}
 }
+
+func TestNewRequest_auth(t *testing.T) {
+	client := NewClient(APIKey)
+	req, err := client.NewRequest("GET", "pypi/cookiecutter", nil)
+
+	if err != nil {
+		t.Fatalf("NewRequest returned error: %v", err)
+	}
+
+	query := req.URL.Query()
+	if got, want := query.Get("api_key"), APIKey; got != want {
+		t.Fatalf("did not set query param to %v, got %v", want, got)
+	}
+}
