@@ -6,6 +6,7 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"time"
 )
 
 const (
@@ -29,7 +30,7 @@ func NewClient(apiKey string) *Client {
 
 	c := &Client{
 		apiKey:    apiKey,
-		client:    http.DefaultClient,
+		client:    &http.Client{Timeout: time.Second * 10},
 		UserAgent: userAgent,
 		BaseURL:   APIBaseURL,
 	}
