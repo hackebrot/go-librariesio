@@ -27,6 +27,18 @@ func TestNewClient(t *testing.T) {
 	}
 }
 
+func TestNewRequest_badURL(t *testing.T) {
+	client := NewClient("")
+	req, err := client.NewRequest("GET", ":", nil)
+
+	if err == nil {
+		t.Fatalf("NewRequest did not return error")
+	}
+	if req != nil {
+		t.Fatalf("did not expect non-nil request, got %+v", req)
+	}
+}
+
 func TestNewRequest_noPayload(t *testing.T) {
 	client := NewClient("")
 	req, err := client.NewRequest("GET", "pypi/cookiecutter", nil)
