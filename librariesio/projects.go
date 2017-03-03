@@ -1,9 +1,7 @@
 package librariesio
 
 import (
-	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"net/http"
 )
 
@@ -14,34 +12,20 @@ type Project struct {
 
 // GetProject returns information about a project and it's versions.
 // GET https://libraries.io/api/:platform/:name
-func (c *Client) GetProject(platform string, name string) (*Project, error) {
+func (c *Client) GetProject(platform string, name string) (*Project, *http.Response, error) {
 	urlStr := fmt.Sprintf("%v/%v", platform, name)
 
 	request, err := c.NewRequest("GET", urlStr, nil)
 
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
-	response, err := c.Do(request)
+	project := new(Project)
+	response, err := c.Do(request, project)
 	if err != nil {
-		return nil, err
-	}
-	defer response.Body.Close()
-
-	if response.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("GET request unsuccesful for %v/%v: %v", platform, name, response.Status)
+		return nil, response, err
 	}
 
-	body, err := ioutil.ReadAll(response.Body)
-	if err != nil {
-		return nil, fmt.Errorf("unable to read body %v", err)
-	}
-
-	var p Project
-	err = json.Unmarshal(body, &p)
-	if err != nil {
-		return nil, fmt.Errorf("unable to deserialize project %v", err)
-	}
-	return &p, nil
+	return project, response, nil
 }
