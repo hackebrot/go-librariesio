@@ -31,14 +31,12 @@ type Client struct {
 func NewClient(apiKey string) *Client {
 	APIBaseURL, _ := url.Parse(baseURL)
 
-	c := &Client{
+	return &Client{
 		apiKey:    apiKey,
 		client:    &http.Client{Timeout: time.Second * 10},
 		UserAgent: userAgent,
 		BaseURL:   APIBaseURL,
 	}
-
-	return c
 }
 
 // NewRequest creates a new API request
