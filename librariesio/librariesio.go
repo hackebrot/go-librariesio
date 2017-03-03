@@ -17,6 +17,7 @@ const (
 	userAgent      = "go-librariesio/" + libraryVersion
 	contentType    = "application/json"
 	mediaType      = "application/json"
+	timeout        = time.Second * 10
 )
 
 // Client for communicating with the libraries.io API
@@ -33,7 +34,7 @@ func NewClient(apiKey string) *Client {
 
 	return &Client{
 		apiKey:    apiKey,
-		client:    &http.Client{Timeout: time.Second * 10},
+		client:    &http.Client{Timeout: timeout},
 		UserAgent: userAgent,
 		BaseURL:   APIBaseURL,
 	}
