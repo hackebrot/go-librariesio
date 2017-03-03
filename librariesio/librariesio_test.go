@@ -29,7 +29,7 @@ func TestNewClient(t *testing.T) {
 }
 
 func TestNewRequest_badURL(t *testing.T) {
-	client := NewClient("")
+	client := NewClient(APIKey)
 	req, err := client.NewRequest("GET", ":", nil)
 
 	if err == nil {
@@ -41,7 +41,7 @@ func TestNewRequest_badURL(t *testing.T) {
 }
 
 func TestNewRequest_noPayload(t *testing.T) {
-	client := NewClient("")
+	client := NewClient(APIKey)
 	req, err := client.NewRequest("GET", "pypi/cookiecutter", nil)
 
 	if err != nil {
@@ -54,7 +54,7 @@ func TestNewRequest_noPayload(t *testing.T) {
 }
 
 func TestNewRequest_invalidJSON(t *testing.T) {
-	client := NewClient("")
+	client := NewClient(APIKey)
 
 	foo := make(map[interface{}]interface{})
 
