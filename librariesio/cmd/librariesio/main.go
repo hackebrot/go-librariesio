@@ -1,8 +1,10 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
+	"time"
 
 	"strings"
 
@@ -32,7 +34,11 @@ func main() {
 	}
 
 	c := librariesio.NewClient(strings.TrimSpace(env["LIBRARIESIO_API_KEY"]))
-	project, _, err := c.GetProject("pypi", "cookiecutter")
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+	defer cancel()
+
+	project, _, err := c.GetProject(ctx, "pypi", "cookiecutter")
 
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "%v\n", err)
