@@ -1,6 +1,7 @@
 package librariesio
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -10,7 +11,6 @@ import (
 	"reflect"
 	"strings"
 	"testing"
-	"time"
 )
 
 const APIKey string = "1234"
@@ -35,10 +35,6 @@ func TestNewClient(t *testing.T) {
 
 	if got, want := c.UserAgent, "go-librariesio/1"; got != want {
 		t.Errorf("NewClient userAgent is %v, want %v", got, want)
-	}
-
-	if got, want := c.client.Timeout, time.Second*10; got != want {
-		t.Errorf("NewClient timeout is %v, want %v", got, want)
 	}
 }
 
@@ -182,7 +178,7 @@ func TestDo_httpClientError(t *testing.T) {
 	client.BaseURL = url
 	defer server.Close()
 
-	_, err := client.Do(&http.Request{}, nil)
+	_, err := client.Do(context.Background(), &http.Request{}, nil)
 	if err == nil {
 		t.Fatalf("Expected error to be returned")
 	}
@@ -199,7 +195,7 @@ func TestDo_badResponse(t *testing.T) {
 	})
 	req, _ := client.NewRequest("GET", "/", nil)
 
-	_, err := client.Do(req, nil)
+	_, err := client.Do(context.Background(), req, nil)
 
 	if err == nil {
 		t.Errorf("Expected HTTP %v error", http.StatusBadRequest)
@@ -221,7 +217,7 @@ func TestDo_badResponseBody(t *testing.T) {
 	}
 
 	request, _ := client.NewRequest("GET", "/", nil)
-	_, err := client.Do(request, new(foo))
+	_, err := client.Do(context.Background(), request, new(foo))
 
 	if err == nil {
 		t.Fatal("Expected response body error")
