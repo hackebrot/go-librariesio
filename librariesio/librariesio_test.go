@@ -2,6 +2,7 @@ package librariesio
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
@@ -202,5 +203,27 @@ func TestDo_badResponse(t *testing.T) {
 
 	if err == nil {
 		t.Errorf("Expected HTTP %v error", http.StatusBadRequest)
+	}
+}
+
+func TestDo_badResponseBody(t *testing.T) {
+	server, mux, url := startNewServer()
+	client := NewClient(APIKey)
+	client.BaseURL = url
+	defer server.Close()
+
+	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprint(w, `{123:"a"}`)
+	})
+
+	type foo struct {
+		Bar string `json:"bar"`
+	}
+
+	request, _ := client.NewRequest("GET", "/", nil)
+	_, err := client.Do(request, new(foo))
+
+	if err == nil {
+		t.Fatal("Expected response body error")
 	}
 }
