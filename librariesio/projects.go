@@ -7,7 +7,7 @@ import (
 
 // Project that holds a name field
 type Project struct {
-	Name string `json:"name,omitempty"`
+	Name string `json:"name"`
 }
 
 // GetProject returns information about a project and it's versions.
