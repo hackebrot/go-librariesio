@@ -93,7 +93,7 @@ func (r *ErrorResponse) Error() string {
 	r.Response.Request.URL.RawQuery = q.Encode()
 
 	return fmt.Sprintf(
-		"%v %v: %d %q ",
+		"%v %v: %d %q",
 		r.Response.Request.Method,
 		r.Response.Request.URL,
 		r.Response.StatusCode,
