@@ -127,7 +127,7 @@ func CheckResponse(resp *http.Response) error {
 }
 
 // Do sends an HTTP request and returns an HTTP response
-func (c *Client) Do(ctx context.Context, req *http.Request, v interface{}) (*http.Response, error) {
+func (c *Client) Do(ctx context.Context, req *http.Request, obj interface{}) (*http.Response, error) {
 	req = req.WithContext(ctx)
 
 	response, err := c.client.Do(req)
@@ -154,14 +154,16 @@ func (c *Client) Do(ctx context.Context, req *http.Request, v interface{}) (*htt
 		return response, err
 	}
 
-	body, err := ioutil.ReadAll(response.Body)
-	if err != nil {
-		return nil, err
-	}
+	if obj != nil {
+		body, err := ioutil.ReadAll(response.Body)
+		if err != nil {
+			return nil, err
+		}
 
-	err = json.Unmarshal(body, v)
-	if err != nil {
-		return nil, err
+		err = json.Unmarshal(body, obj)
+		if err != nil {
+			return nil, err
+		}
 	}
 	return response, nil
 }
