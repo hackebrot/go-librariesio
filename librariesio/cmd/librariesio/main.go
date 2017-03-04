@@ -30,7 +30,6 @@ func main() {
 		fmt.Fprintf(os.Stderr, "error: %v\n", err)
 		os.Exit(1)
 	}
-	fmt.Fprintf(os.Stdout, "%v\n", env)
 
 	c := librariesio.NewClient(strings.TrimSpace(env["LIBRARIESIO_API_KEY"]))
 	project, _, err := c.GetProject("pypi", "cookiecutter")
@@ -39,5 +38,5 @@ func main() {
 		fmt.Fprintf(os.Stderr, "%v\n", err)
 		os.Exit(1)
 	}
-	fmt.Fprintf(os.Stdout, "%v\n", project)
+	fmt.Fprintf(os.Stdout, "%+v\n", project)
 }
