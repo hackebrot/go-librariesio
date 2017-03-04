@@ -2,6 +2,7 @@ package librariesio
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -23,6 +24,7 @@ const (
 // Client for communicating with the libraries.io API
 type Client struct {
 	apiKey    string
+	transport *http.Transport
 	client    *http.Client
 	UserAgent string
 	BaseURL   *url.URL
@@ -32,9 +34,13 @@ type Client struct {
 func NewClient(apiKey string) *Client {
 	APIBaseURL, _ := url.Parse(baseURL)
 
+	transport := &http.Transport{}
+	client := &http.Client{Transport: transport}
+
 	return &Client{
 		apiKey:    apiKey,
-		client:    &http.Client{Timeout: timeout},
+		client:    client,
+		transport: transport,
 		UserAgent: userAgent,
 		BaseURL:   APIBaseURL,
 	}
@@ -118,11 +124,18 @@ func CheckResponse(resp *http.Response) error {
 }
 
 // Do sends an HTTP request and returns an HTTP response
-func (c *Client) Do(req *http.Request, v interface{}) (*http.Response, error) {
+func (c *Client) Do(ctx context.Context, req *http.Request, v interface{}) (*http.Response, error) {
+	req = req.WithContext(ctx)
 
 	response, err := c.client.Do(req)
 	if err != nil {
-		return nil, err
+		select {
+		case <-ctx.Done():
+			c.transport.CancelRequest(req)
+			return nil, ctx.Err()
+		default:
+			return nil, err
+		}
 	}
 	defer response.Body.Close()
 

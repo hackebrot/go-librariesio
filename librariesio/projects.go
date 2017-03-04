@@ -1,6 +1,7 @@
 package librariesio
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"time"
@@ -34,7 +35,7 @@ type Release struct {
 
 // GetProject returns information about a project and it's versions.
 // GET https://libraries.io/api/:platform/:name
-func (c *Client) GetProject(platform string, name string) (*Project, *http.Response, error) {
+func (c *Client) GetProject(ctx context.Context, platform string, name string) (*Project, *http.Response, error) {
 	urlStr := fmt.Sprintf("%v/%v", platform, name)
 
 	request, err := c.NewRequest("GET", urlStr, nil)
@@ -44,7 +45,7 @@ func (c *Client) GetProject(platform string, name string) (*Project, *http.Respo
 	}
 
 	project := new(Project)
-	response, err := c.Do(request, project)
+	response, err := c.Do(ctx, request, project)
 	if err != nil {
 		return nil, response, err
 	}
