@@ -172,6 +172,35 @@ func TestErrorResponse(t *testing.T) {
 	}
 }
 
+func TestDo(t *testing.T) {
+	server, mux, url := startNewServer()
+	client := NewClient(APIKey)
+	client.BaseURL = url
+	defer server.Close()
+
+	type foo struct {
+		Bar string `json:"bar"`
+	}
+
+	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		if method := "GET"; method != r.Method {
+			t.Errorf("expected HTTP %v request, got %v", method, r.Method)
+		}
+		fmt.Fprintf(w, `{"bar":"helloworld"}`)
+	})
+
+	req, _ := client.NewRequest("GET", "/", nil)
+
+	got := new(foo)
+	client.Do(context.Background(), req, got)
+
+	want := &foo{Bar: "helloworld"}
+
+	if !reflect.DeepEqual(got, want) {
+		t.Errorf("response body does not match, want %v, got %v", want, got)
+	}
+}
+
 func TestDo_httpClientError(t *testing.T) {
 	server, _, url := startNewServer()
 	client := NewClient(APIKey)
