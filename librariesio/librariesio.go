@@ -137,6 +137,13 @@ func (c *Client) Do(ctx context.Context, req *http.Request, v interface{}) (*htt
 			c.transport.CancelRequest(req)
 			return nil, ctx.Err()
 		default:
+			// If error is of type *url.Error redact api_key
+			if urlError, ok := err.(*url.Error); ok {
+				if url, err := url.Parse(urlError.URL); err == nil {
+					urlError.URL = redactAPIKey(url).String()
+					return nil, urlError
+				}
+			}
 			return nil, err
 		}
 	}

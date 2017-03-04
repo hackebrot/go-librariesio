@@ -232,6 +232,26 @@ func TestDo_httpClientError(t *testing.T) {
 	}
 }
 
+func TestDo_redactAPIKeyOnURLError(t *testing.T) {
+	server, _, _ := startNewServer()
+	client := NewClient(APIKey)
+	defer server.Close()
+
+	client.BaseURL = &url.URL{Scheme: "http", Host: "127.0.0.1:0", Path: "/"}
+
+	req, err := client.NewRequest("GET", "/", nil)
+	if err != nil {
+		t.Fatalf("NewRequest returned unexpected error: %v", err)
+	}
+	_, err = client.Do(context.Background(), req, nil)
+	if err == nil {
+		t.Fatal("No error returned")
+	}
+	if strings.Contains(err.Error(), "api_key=1234") {
+		t.Errorf("Do error contains api_key: %v", err)
+	}
+}
+
 func TestDo_badResponse(t *testing.T) {
 	server, mux, url := startNewServer()
 	client := NewClient(APIKey)
