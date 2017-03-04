@@ -186,3 +186,21 @@ func TestDo_httpClientError(t *testing.T) {
 		t.Fatalf("Expected error to be returned")
 	}
 }
+
+func TestDo_badResponse(t *testing.T) {
+	server, mux, url := startNewServer()
+	client := NewClient(APIKey)
+	client.BaseURL = url
+	defer server.Close()
+
+	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		http.Error(w, "Nope", http.StatusBadRequest)
+	})
+	req, _ := client.NewRequest("GET", "/", nil)
+
+	_, err := client.Do(req, nil)
+
+	if err == nil {
+		t.Errorf("Expected HTTP %v error", http.StatusBadRequest)
+	}
+}
