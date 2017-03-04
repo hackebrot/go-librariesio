@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
+	"net/http/httptest"
+	"net/url"
 	"reflect"
 	"strings"
 	"testing"
@@ -11,6 +13,13 @@ import (
 )
 
 const APIKey string = "1234"
+
+func startNewServer() (*httptest.Server, *http.ServeMux, *url.URL) {
+	mux := http.NewServeMux()
+	server := httptest.NewServer(mux)
+	url, _ := url.Parse(server.URL)
+	return server, mux, url
+}
 
 func checkHeader(t *testing.T, req *http.Request, header string, want string) {
 	if got := req.Header.Get(header); got != want {
@@ -167,5 +176,17 @@ func TestErrorResponse(t *testing.T) {
 
 	if got := err.Error(); got != want {
 		t.Fatalf("\nExpected %q\nGot %q", want, got)
+	}
+}
+
+func TestDo_httpClientError(t *testing.T) {
+	server, _, url := startNewServer()
+	client := NewClient(APIKey)
+	client.BaseURL = url
+	defer server.Close()
+
+	_, err := client.Do(&http.Request{}, nil)
+	if err == nil {
+		t.Fatalf("Expected error to be returned")
 	}
 }
