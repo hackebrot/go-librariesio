@@ -21,12 +21,6 @@ func startNewServer() (*httptest.Server, *http.ServeMux, *url.URL) {
 	return server, mux, url
 }
 
-func checkHeader(t *testing.T, req *http.Request, header string, want string) {
-	if got := req.Header.Get(header); got != want {
-		t.Errorf("Header.Get(%q) returned %q, want %q", header, got, want)
-	}
-}
-
 func TestNewClient(t *testing.T) {
 	c := NewClient(APIKey)
 
@@ -135,8 +129,10 @@ func TestNewRequest_headers(t *testing.T) {
 				t.Fatal("unexpected error")
 			}
 
-			for key, value := range testCase.headers {
-				checkHeader(t, req, key, value)
+			for header, want := range testCase.headers {
+				if got := req.Header.Get(header); got != want {
+					t.Errorf("Header.Get(%q) returned %q, want %q", header, got, want)
+				}
 			}
 		})
 	}
