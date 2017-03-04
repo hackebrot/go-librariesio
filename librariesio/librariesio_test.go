@@ -78,6 +78,17 @@ func TestNewRequest_invalidJSON(t *testing.T) {
 	}
 }
 
+func TestNewRequest_httpRequestError(t *testing.T) {
+	client := NewClient(APIKey)
+	req, err := client.NewRequest(" ", "pypi/cookiecutter", nil)
+	if err == nil {
+		t.Fatalf("NewRequest did not return error")
+	}
+	if req != nil {
+		t.Fatalf("did not expect non-nil request, got %+v", req)
+	}
+}
+
 func TestNewRequest_auth(t *testing.T) {
 	client := NewClient(APIKey)
 	req, err := client.NewRequest("GET", "pypi/cookiecutter", nil)
