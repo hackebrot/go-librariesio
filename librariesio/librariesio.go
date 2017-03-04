@@ -85,6 +85,14 @@ func (c *Client) NewRequest(method, urlStr string, data interface{}) (*http.Requ
 	return request, nil
 }
 
+// redactAPIKey overwrites the secret api_key query param
+func redactAPIKey(url *url.URL) *url.URL {
+	q := url.Query()
+	q.Set("api_key", "REDACTED")
+	url.RawQuery = q.Encode()
+	return url
+}
+
 // ErrorResponse holds information about an unsuccesful API request
 type ErrorResponse struct {
 	Response *http.Response
@@ -93,15 +101,10 @@ type ErrorResponse struct {
 
 // Error interface implementation for ErrorResponse
 func (r *ErrorResponse) Error() string {
-	// Make sure to not show api_key
-	q := r.Response.Request.URL.Query()
-	q.Set("api_key", "REDACTED")
-	r.Response.Request.URL.RawQuery = q.Encode()
-
 	return fmt.Sprintf(
 		"%v %v: %d %q",
 		r.Response.Request.Method,
-		r.Response.Request.URL,
+		redactAPIKey(r.Response.Request.URL),
 		r.Response.StatusCode,
 		r.Message,
 	)
