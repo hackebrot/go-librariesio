@@ -150,6 +150,22 @@ func TestCheckResponse(t *testing.T) {
 		Message:  "Nope Nope Nope",
 	}
 	if !reflect.DeepEqual(errResponse, want) {
-		t.Errorf("\nExpected %#v\ngot %#v", want, errResponse)
+		t.Errorf("\nExpected %#v\nGot %#v", want, errResponse)
+	}
+}
+
+func TestErrorResponse(t *testing.T) {
+	client := NewClient(APIKey)
+	request, _ := client.NewRequest("GET", "pypi/poyo", nil)
+	response := &http.Response{
+		Request:    request,
+		StatusCode: http.StatusBadRequest,
+	}
+
+	err := &ErrorResponse{Response: response, Message: "nope"}
+	want := `GET https://libraries.io/api/pypi/poyo?api_key=REDACTED: 400 "nope"`
+
+	if got := err.Error(); got != want {
+		t.Fatalf("\nExpected %q\nGot %q", want, got)
 	}
 }
