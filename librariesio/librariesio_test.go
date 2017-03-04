@@ -2,7 +2,10 @@ package librariesio
 
 import (
 	"encoding/json"
+	"io/ioutil"
 	"net/http"
+	"reflect"
+	"strings"
 	"testing"
 	"time"
 )
@@ -127,5 +130,26 @@ func TestNewRequest_headers(t *testing.T) {
 				checkHeader(t, req, key, value)
 			}
 		})
+	}
+}
+
+func TestCheckResponse(t *testing.T) {
+	response := &http.Response{
+		Request:    &http.Request{},
+		StatusCode: http.StatusBadRequest,
+		Body:       ioutil.NopCloser(strings.NewReader(`{"error":"Nope Nope Nope"}`)),
+	}
+	errResponse, ok := CheckResponse(response).(*ErrorResponse)
+
+	if !ok {
+		t.Errorf("Expected ErrorResponse, got %v", errResponse)
+	}
+
+	want := &ErrorResponse{
+		Response: response,
+		Message:  "Nope Nope Nope",
+	}
+	if !reflect.DeepEqual(errResponse, want) {
+		t.Errorf("\nExpected %#v\ngot %#v", want, errResponse)
 	}
 }
