@@ -135,6 +135,25 @@ func TestNewRequest_headers(t *testing.T) {
 	}
 }
 
+func TestRedactAPIKey(t *testing.T) {
+	url, err := url.Parse("pypi/poyo")
+
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	q := url.Query()
+	q.Set("api_key", APIKey)
+	url.RawQuery = q.Encode()
+
+	got := redactAPIKey(url).String()
+	want := "pypi/poyo?api_key=REDACTED"
+
+	if got != want {
+		t.Fatalf("api_key param in URL is not redacted, got %v", got)
+	}
+}
+
 func TestCheckResponse(t *testing.T) {
 	response := &http.Response{
 		Request:    &http.Request{},
