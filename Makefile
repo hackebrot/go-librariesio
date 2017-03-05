@@ -9,6 +9,12 @@ cmd:  ##  Install application binaries
 	@go install $(PACKAGE)/...
 
 
+.PHONY: doc
+doc:  ##  Generate documentation
+	@echo "+ $@"
+	@godoc $(PACKAGE)/librariesio
+
+
 .PHONY: test
 test:  ##  Run unit tests
 	@echo "+ $@"

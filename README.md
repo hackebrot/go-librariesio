@@ -47,8 +47,16 @@ fmt.Fprintf(
 
 ## License
 
-Distributed under the terms of the [MIT License][MIT], amelia is free and
-open source software.
+Distributed under the terms of the [MIT License][MIT], **go-librariesio** is
+free and open source software.
+
+
+## Contributing
+
+Contributions are welcome, and they are greatly appreciated! Every
+little bit helps, and credit will always be given.
+
+Please check out this [guide][contributing] to get started!
 
 
 ## Code of Conduct
@@ -58,8 +66,10 @@ Please note that this project is released with a
 
 By participating in this project you agree to abide by its terms.
 
+
 [api_key]: https://libraries.io/account
 [api]: https://libraries.io/api
-[Code of Conduct]: code_of_conduct.md
+[Code of Conduct]: CODE_OF_CONDUCT.md
+[contributing]: CONTRIBUTING.md
 [libraries.io]: https://libraries.io/
 [MIT]: LICENSE
