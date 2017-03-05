@@ -11,6 +11,7 @@ import (
 	"reflect"
 	"strings"
 	"testing"
+	"time"
 )
 
 const APIKey string = "1234"
@@ -240,6 +241,36 @@ func TestDo_httpClientError(t *testing.T) {
 	_, err := client.Do(context.Background(), &http.Request{}, nil)
 	if err == nil {
 		t.Fatalf("Expected error to be returned")
+	}
+}
+
+func TestDo_cancelRequest(t *testing.T) {
+	server, mux, url := startNewServer()
+	client := NewClient(APIKey)
+	client.BaseURL = url
+	defer server.Close()
+
+	// Cancel any requests after 10ms
+	ctx, cancel := context.WithTimeout(
+		context.Background(),
+		time.Millisecond*10,
+	)
+	defer cancel()
+
+	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		time.Sleep(time.Millisecond * 100)
+		fmt.Fprint(w, `{"123":"a"}`)
+	})
+
+	req, err := client.NewRequest("GET", "/", nil)
+	if err != nil {
+		t.Fatalf("NewRequest returned unexpected error: %v", err)
+	}
+
+	_, err = client.Do(ctx, req, nil)
+
+	if err != context.DeadlineExceeded {
+		t.Fatalf("expected ctx error, got %v", err)
 	}
 }
 
