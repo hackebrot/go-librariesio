@@ -1,6 +1,9 @@
 # go-librariesio
 
-go-librariesio is a Go client library for accessing the [libraries.io][libraries.io] API.
+
+go-librariesio is a Go client library for accessing the
+[libraries.io][libraries.io] API.
+
 
 ## Installation
 
@@ -10,12 +13,37 @@ go-librariesio is a Go client library for accessing the [libraries.io][libraries
 ## libraries.io API
 
 Connecting to the [libraries.io API][api] with **go-librariesio** requires
-a API key.
+a [private API key][api_key].
 
-Please [get your private token][api_key] and set the following environment variable:
+## Usage
 
-- ``LIBRARIESIO_API_KEY`` - your private libraries.io API token
+```go
+// Create new API client with your API key
+c := librariesio.NewClient("... your API key ...")
 
+// Create a new context (with a timeout if you want)
+ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+defer cancel()
+
+// Request information about a project using the client
+project, _, err := c.GetProject(ctx, "pypi", "cookiecutter")
+
+if err != nil {
+    fmt.Fprintf(os.Stderr, "%v\n", err)
+    os.Exit(1)
+}
+
+// All structs for API resources use pointer values.
+// If you expect fields to not be returned by the API
+// make sure to check for nil values before deferencing.
+fmt.Fprintf(
+    os.Stdout,
+    "name: %s\nversion: %s\nlanguage: %s\n",
+    *project.Name,
+    *project.LatestReleaseNumber,
+    *project.Language,
+)
+```
 
 ## License
 
