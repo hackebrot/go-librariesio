@@ -44,5 +44,5 @@ func main() {
 		fmt.Fprintf(os.Stderr, "%v\n", err)
 		os.Exit(1)
 	}
-	fmt.Fprintf(os.Stdout, "%+v\n", project)
+	fmt.Fprintf(os.Stdout, "%s\n", *project.Name)
 }
