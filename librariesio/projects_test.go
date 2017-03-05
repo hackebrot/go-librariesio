@@ -25,9 +25,9 @@ func TestGetProject(t *testing.T) {
 	if err != nil {
 		t.Fatalf("GetProject returned unexpected error: %v", err)
 	}
-	want := &Project{
-		Name: "cookiecutter",
-	}
+
+	name := "cookiecutter"
+	want := &Project{Name: &name}
 
 	if !reflect.DeepEqual(project, want) {
 		t.Errorf("\nExpected %#v\nGot %#v", want, project)
