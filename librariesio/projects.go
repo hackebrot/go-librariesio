@@ -32,20 +32,20 @@ type Project struct {
 
 // Release represents a release of the project
 type Release struct {
-	Number      string    `json:"number,omitempty"`
-	PublishedAt time.Time `json:"published_at,omitempty"`
+	Number      *string    `json:"number,omitempty"`
+	PublishedAt *time.Time `json:"published_at,omitempty"`
 }
 
 // ProjectDependency represents a dependency of the project
 type ProjectDependency struct {
-	Deprecated   bool   `json:"deprecated,omitempty"`
-	Latest       string `json:"latest,omitempty"`
-	LatestStable string `json:"latest_stable,omitempty"`
-	Name         string `json:"name,omitempty"`
-	Outdated     bool   `json:"outdated,omitempty"`
-	Platform     string `json:"platform,omitempty"`
-	ProjectName  string `json:"project_name,omitempty"`
-	Requirements string `json:"requirements,omitempty"`
+	Deprecated   *bool   `json:"deprecated,omitempty"`
+	Latest       *string `json:"latest,omitempty"`
+	LatestStable *string `json:"latest_stable,omitempty"`
+	Name         *string `json:"name,omitempty"`
+	Outdated     *bool   `json:"outdated,omitempty"`
+	Platform     *string `json:"platform,omitempty"`
+	ProjectName  *string `json:"project_name,omitempty"`
+	Requirements *string `json:"requirements,omitempty"`
 }
 
 // GetProject returns information about a project and it's versions.
