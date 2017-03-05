@@ -9,7 +9,6 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
-	"time"
 )
 
 const (
@@ -18,7 +17,6 @@ const (
 	userAgent      = "go-librariesio/" + libraryVersion
 	contentType    = "application/json"
 	mediaType      = "application/json"
-	timeout        = time.Second * 10
 )
 
 // Client for communicating with the libraries.io API
