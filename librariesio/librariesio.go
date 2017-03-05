@@ -46,7 +46,9 @@ func NewClient(apiKey string) *Client {
 	}
 }
 
-// NewRequest creates a new API request
+// NewRequest creates a new API request, that can be used for client.Do().
+// It creates an absolute URL from the given URL string and serialize the
+// given payload, set the according headers and add the api_key query param.
 func (c *Client) NewRequest(method, urlStr string, data interface{}) (*http.Request, error) {
 	relativeURL, err := url.Parse(urlStr)
 	if err != nil {
@@ -65,24 +67,24 @@ func (c *Client) NewRequest(method, urlStr string, data interface{}) (*http.Requ
 		}
 	}
 
-	request, err := http.NewRequest(method, absoluteURL.String(), body)
+	req, err := http.NewRequest(method, absoluteURL.String(), body)
 	if err != nil {
 		return nil, err
 	}
 
 	// set api_key for auth
-	q := request.URL.Query()
+	q := req.URL.Query()
 	q.Set("api_key", c.apiKey)
-	request.URL.RawQuery = q.Encode()
+	req.URL.RawQuery = q.Encode()
 
-	request.Header.Set("Accept", mediaType)
-	request.Header.Set("User-Agent", c.UserAgent)
+	req.Header.Set("Accept", mediaType)
+	req.Header.Set("User-Agent", c.UserAgent)
 
 	if data != nil {
-		request.Header.Set("Content-Type", "application/json")
+		req.Header.Set("Content-Type", "application/json")
 	}
 
-	return request, nil
+	return req, nil
 }
 
 // redactAPIKey overwrites the secret api_key query param
@@ -93,13 +95,14 @@ func redactAPIKey(url *url.URL) *url.URL {
 	return url
 }
 
-// ErrorResponse holds information about an unsuccesful API request
+// ErrorResponse holds information about an unsuccesful API request.
+// The error message from the API response is stored to the Message field.
 type ErrorResponse struct {
 	Response *http.Response
 	Message  string `json:"error"`
 }
 
-// Error interface implementation for ErrorResponse
+// Error returns information about the ErrorResponse
 func (r *ErrorResponse) Error() string {
 	return fmt.Sprintf(
 		"%v %v: %d %q",
@@ -117,27 +120,33 @@ func CheckResponse(resp *http.Response) error {
 		return nil
 	}
 
-	errorResponse := &ErrorResponse{Response: resp}
+	errResp := &ErrorResponse{Response: resp}
 
 	data, err := ioutil.ReadAll(resp.Body)
 	if err == nil && data != nil {
-		json.Unmarshal(data, errorResponse)
+		json.Unmarshal(data, errResp)
 	}
-	return errorResponse
+	return errResp
 }
 
-// Do sends an HTTP request and returns an HTTP response
+// Do sends an HTTP request, that can be cancelled via the given context.
+// It makes sure to redact the API secret key from any URL errors and load
+// the body from the HTTP response into the given obj and return the response.
 func (c *Client) Do(ctx context.Context, req *http.Request, obj interface{}) (*http.Response, error) {
 	req = req.WithContext(ctx)
 
-	response, err := c.client.Do(req)
+	resp, err := c.client.Do(req)
 	if err != nil {
 		select {
 		case <-ctx.Done():
+			// Cancel the HTTP request if the given context is cancelled
+			// is cancelled, when the deadline exceeds or the caller
+			// cancels the context explicitly
 			c.transport.CancelRequest(req)
 			return nil, ctx.Err()
 		default:
-			// If error is of type *url.Error redact api_key
+			// If we have encountered an url.Error make sure
+			// to redact the API secret key from the URL
 			if urlError, ok := err.(*url.Error); ok {
 				if url, err := url.Parse(urlError.URL); err == nil {
 					urlError.URL = redactAPIKey(url).String()
@@ -147,15 +156,17 @@ func (c *Client) Do(ctx context.Context, req *http.Request, obj interface{}) (*h
 			return nil, err
 		}
 	}
-	defer response.Body.Close()
+	defer resp.Body.Close()
 
-	err = CheckResponse(response)
+	// Check that the response's status code is OK
+	err = CheckResponse(resp)
 	if err != nil {
-		return response, err
+		return resp, err
 	}
 
+	// Load body into the given obj
 	if obj != nil {
-		body, err := ioutil.ReadAll(response.Body)
+		body, err := ioutil.ReadAll(resp.Body)
 		if err != nil {
 			return nil, err
 		}
@@ -165,5 +176,6 @@ func (c *Client) Do(ctx context.Context, req *http.Request, obj interface{}) (*h
 			return nil, err
 		}
 	}
-	return response, nil
+
+	return resp, nil
 }
