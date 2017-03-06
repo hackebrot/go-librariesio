@@ -15,6 +15,13 @@ doc:  ##  Generate documentation
 	@godoc $(PACKAGE)/librariesio
 
 
+.PHONY: vet
+vet:  ##  Run the go vet cmd on the package
+	@echo "+ $@"
+	@go vet $(PACKAGE)/librariesio
+
+
+
 .PHONY: test
 test:  ##  Run unit tests
 	@echo "+ $@"
