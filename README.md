@@ -70,7 +70,7 @@ By participating in this project you agree to abide by its terms.
 [Code of Conduct]: CODE_OF_CONDUCT.md
 [contributing]: CONTRIBUTING.md
 [godoc_badge]: https://img.shields.io/badge/go-documentation-blue.svg?style=flat
-[godoc]: https://godoc.org/github.com/hackebrot/go-librariesio (See GoDoc Reference)
+[godoc]: https://godoc.org/github.com/hackebrot/go-librariesio/librariesio (See GoDoc Reference)
 [libraries.io]: https://libraries.io/
 [MIT]: LICENSE
 [travis_badge]: https://img.shields.io/travis/hackebrot/go-librariesio.svg?style=flat
