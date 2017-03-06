@@ -1,5 +1,7 @@
 # go-librariesio
 
+[![GoDoc Reference][godoc_badge]][godoc]
+[![Build Status][travis_badge]][travis]
 
 go-librariesio is a Go client library for accessing the
 [libraries.io][libraries.io] API.
@@ -7,7 +9,7 @@ go-librariesio is a Go client library for accessing the
 
 ## Installation
 
-``go get -u github.com/hackebrot/go-librariesio``
+``go get github.com/hackebrot/go-librariesio``
 
 
 ## libraries.io API
@@ -35,7 +37,7 @@ if err != nil {
 
 // All structs for API resources use pointer values.
 // If you expect fields to not be returned by the API
-// make sure to check for nil values before deferencing.
+// make sure to check for nil values before dereferencing.
 fmt.Fprintf(
     os.Stdout,
     "name: %s\nversion: %s\nlanguage: %s\n",
@@ -71,5 +73,9 @@ By participating in this project you agree to abide by its terms.
 [api]: https://libraries.io/api
 [Code of Conduct]: CODE_OF_CONDUCT.md
 [contributing]: CONTRIBUTING.md
+[godoc_badge]: https://img.shields.io/badge/go-documentation-blue.svg?style=flat
+[godoc]: https://godoc.org/github.com/hackebrot/go-librariesio (See GoDoc Reference)
 [libraries.io]: https://libraries.io/
 [MIT]: LICENSE
+[travis_badge]: https://img.shields.io/travis/hackebrot/go-librariesio.svg?style=flat
+[travis]: https://travis-ci.org/hackebrot/go-librariesio (See Build Status on Travis CI)
