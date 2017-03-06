@@ -138,8 +138,8 @@ func (c *Client) Do(ctx context.Context, req *http.Request, obj interface{}) (*h
 		select {
 		case <-ctx.Done():
 			// Cancel the HTTP request if the given context is cancelled
-			// is cancelled, when the deadline exceeds or the caller
-			// cancels the context explicitly
+			// This can be because the deadline exceeds or the caller
+			// cancels the context explicitly.
 			c.transport.CancelRequest(req)
 			return nil, ctx.Err()
 		default:
