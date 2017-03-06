@@ -157,8 +157,7 @@ func (c *Client) Do(ctx context.Context, req *http.Request, obj interface{}) (*h
 	defer resp.Body.Close()
 
 	// Check that the response's status code is OK
-	err = CheckResponse(resp)
-	if err != nil {
+	if err := CheckResponse(resp); err != nil {
 		return resp, err
 	}
 
