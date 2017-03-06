@@ -65,8 +65,14 @@ Please note that this project is released with a
 By participating in this project you agree to abide by its terms.
 
 
+## About
+
+Read about why I created **go-librariesio** in this [blog post][blog].
+
+
 [api_key]: https://libraries.io/account
 [api]: https://libraries.io/api
+[blog]: https://raphael.codes/blog/announcing-go-librariesio/
 [Code of Conduct]: CODE_OF_CONDUCT.md
 [contributing]: CONTRIBUTING.md
 [godoc_badge]: https://img.shields.io/badge/go-documentation-blue.svg?style=flat
