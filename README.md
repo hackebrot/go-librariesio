@@ -38,13 +38,9 @@ if err != nil {
 // All structs for API resources use pointer values.
 // If you expect fields to not be returned by the API
 // make sure to check for nil values before dereferencing.
-fmt.Fprintf(
-    os.Stdout,
-    "name: %s\nversion: %s\nlanguage: %s\n",
-    *project.Name,
-    *project.LatestReleaseNumber,
-    *project.Language,
-)
+fmt.Printf("name: %v\n", *project.Name)
+fmt.Printf("version: %v\n", *project.LatestReleaseNumber)
+fmt.Printf("language: %v\n", *project.Language)
 ```
 
 ## License
