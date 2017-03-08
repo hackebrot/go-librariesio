@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestGetProject(t *testing.T) {
+func TestProject(t *testing.T) {
 	server, mux, url := startNewServer()
 	client := NewClient(APIKey)
 	client.BaseURL = url
@@ -22,9 +22,9 @@ func TestGetProject(t *testing.T) {
 		fmt.Fprintf(w, `{"name":"cookiecutter"}`)
 	})
 
-	project, _, err := client.GetProject(context.Background(), "pypi", "cookiecutter")
+	project, _, err := client.Project(context.Background(), "pypi", "cookiecutter")
 	if err != nil {
-		t.Fatalf("GetProject returned unexpected error: %v", err)
+		t.Fatalf("Project returned unexpected error: %v", err)
 	}
 
 	name := "cookiecutter"

@@ -48,10 +48,14 @@ type ProjectDependency struct {
 	Requirements *string `json:"requirements,omitempty"`
 }
 
-// GetProject returns information about a project and it's versions.
+// Project returns information about a project and it's versions.
+//
 // GET https://libraries.io/api/:platform/:name
-func (c *Client) GetProject(ctx context.Context, platform string, name string) (*Project, *http.Response, error) {
-	urlStr := fmt.Sprintf("%v/%v", platform, name)
+//
+// plat is the platform/package manager of the project
+// name is the name of the project on the platform
+func (c *Client) Project(ctx context.Context, plat, name string) (*Project, *http.Response, error) {
+	urlStr := fmt.Sprintf("%v/%v", plat, name)
 
 	request, err := c.NewRequest("GET", urlStr, nil)
 

@@ -38,7 +38,7 @@ func main() {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
 	defer cancel()
 
-	project, _, err := c.GetProject(ctx, "pypi", "cookiecutter")
+	project, _, err := c.Project(ctx, "pypi", "cookiecutter")
 
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "%v\n", err)
