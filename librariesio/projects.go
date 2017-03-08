@@ -26,7 +26,7 @@ type Project struct {
 	Status                   *string    `json:"status,omitempty"`
 	Versions                 []*Release `json:"versions,omitempty"`
 
-	// Dependencies are only populated for GetProjectDependencies
+	// Dependencies are only populated for ProjectDeps
 	Dependencies []*ProjectDependency `json:"dependencies,omitempty"`
 }
 
@@ -60,6 +60,32 @@ func (c *Client) GetProject(ctx context.Context, platform string, name string) (
 	}
 
 	project := new(Project)
+	response, err := c.Do(ctx, request, project)
+	if err != nil {
+		return nil, response, err
+	}
+
+	return project, response, nil
+}
+
+// ProjectDeps returns information about a project and it's dependencies.
+//
+// GET https://libraries.io/api/:platform/:name/:version/dependencies
+//
+// plat is the platform/package manager of the project
+// name is the name of the project on the platform
+// ver is the version of the project - pass "latest" for current release
+func (c *Client) ProjectDeps(ctx context.Context, plat, name, ver string) (*Project, *http.Response, error) {
+
+	urlStr := fmt.Sprintf("%v/%v/%v/dependencies", plat, name, ver)
+
+	request, err := c.NewRequest("GET", urlStr, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	project := new(Project)
+
 	response, err := c.Do(ctx, request, project)
 	if err != nil {
 		return nil, response, err
