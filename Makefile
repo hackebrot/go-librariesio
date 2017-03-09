@@ -3,6 +3,12 @@ COVER_FILE = coverage.out
 
 .DEFAULT_GOAL := help
 
+.PHONY: install
+install:  ##  Install library
+	@echo "+ $@"
+	@go install $(PACKAGE)/librariesio
+
+
 .PHONY: cmd
 cmd:  ##  Install application binaries
 	@echo "+ $@"
