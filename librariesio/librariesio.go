@@ -93,7 +93,7 @@ func redactAPIKey(url *url.URL) *url.URL {
 	return url
 }
 
-// ErrorResponse holds information about an unsuccesful API request.
+// ErrorResponse holds information about an unsuccessful API request.
 // The error message from the API response is stored to the Message field.
 type ErrorResponse struct {
 	Response *http.Response
@@ -112,7 +112,7 @@ func (r *ErrorResponse) Error() string {
 }
 
 // CheckResponse checks the API response for errors and returns a ErrorResponse
-// Responses are considered unsuccesful for status code other than 2xx.
+// Responses are considered unsuccessful for status code other than 2xx.
 func CheckResponse(resp *http.Response) error {
 	if code := resp.StatusCode; 200 <= code && code <= 299 {
 		return nil
