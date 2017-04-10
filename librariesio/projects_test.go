@@ -68,12 +68,12 @@ func TestProjectDeps(t *testing.T) {
 	want := &Project{
 		Name: String("ava"),
 		Dependencies: []*ProjectDependency{
-			&ProjectDependency{
+			{
 				Latest:   String("3.2.0"),
 				Name:     String("mocha"),
 				Outdated: Bool(false),
 			},
-			&ProjectDependency{
+			{
 				Latest:   String("1.1.3"),
 				Name:     String("chalk"),
 				Outdated: Bool(true),
