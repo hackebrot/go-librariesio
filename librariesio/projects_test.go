@@ -7,6 +7,8 @@ import (
 	"reflect"
 	"strings"
 	"testing"
+
+	"github.com/hackebrot/go-repr/repr"
 )
 
 func TestProject(t *testing.T) {
@@ -31,7 +33,7 @@ func TestProject(t *testing.T) {
 	want := &Project{Name: &name}
 
 	if !reflect.DeepEqual(project, want) {
-		t.Errorf("\nExpected %#v\nGot %#v", want, project)
+		t.Errorf("\nExpected %v\nGot %v", repr.Repr(want), repr.Repr(project))
 	}
 }
 
@@ -82,7 +84,7 @@ func TestProjectDeps(t *testing.T) {
 	}
 
 	if !reflect.DeepEqual(project, want) {
-		t.Errorf("\nExpected %#v\nGot %#v", want, project)
+		t.Errorf("\nExpected %v\nGot %v", repr.Repr(want), repr.Repr(project))
 	}
 }
 
@@ -138,6 +140,6 @@ func TestSearch(t *testing.T) {
 	}
 
 	if !reflect.DeepEqual(projects, want) {
-		t.Errorf("\nExpected %#v\nGot %#v", want, projects)
+		t.Errorf("\nExpected %v\nGot %v", repr.Repr(want), repr.Repr(projects))
 	}
 }
