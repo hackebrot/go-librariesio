@@ -97,3 +97,29 @@ func (c *Client) ProjectDeps(ctx context.Context, plat, name, ver string) (*Proj
 
 	return project, response, nil
 }
+
+// Search returns a slice of projects for the given search string
+//
+// GET https://libraries.io/api/search?q=amelia
+func (c *Client) Search(ctx context.Context, q string) ([]*Project, *http.Response, error) {
+	urlStr := fmt.Sprintf("search")
+
+	request, err := c.NewRequest("GET", urlStr, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	// Add query to request
+	query := request.URL.Query()
+	query.Set("q", q)
+	request.URL.RawQuery = query.Encode()
+
+	var projects []*Project
+
+	response, err := c.Do(ctx, request, &projects)
+	if err != nil {
+		return nil, response, err
+	}
+
+	return projects, response, nil
+}
