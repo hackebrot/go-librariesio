@@ -7,6 +7,8 @@ import (
 	"reflect"
 	"strings"
 	"testing"
+
+	"github.com/hackebrot/go-repr/repr"
 )
 
 func TestProject(t *testing.T) {
@@ -31,7 +33,7 @@ func TestProject(t *testing.T) {
 	want := &Project{Name: &name}
 
 	if !reflect.DeepEqual(project, want) {
-		t.Errorf("\nExpected %#v\nGot %#v", want, project)
+		t.Errorf("\nExpected %v\nGot %v", repr.Repr(want), repr.Repr(project))
 	}
 }
 
@@ -82,6 +84,62 @@ func TestProjectDeps(t *testing.T) {
 	}
 
 	if !reflect.DeepEqual(project, want) {
-		t.Errorf("\nExpected %#v\nGot %#v", want, project)
+		t.Errorf("\nExpected %v\nGot %v", repr.Repr(want), repr.Repr(project))
+	}
+}
+
+func TestSearch(t *testing.T) {
+	server, mux, url := startNewServer()
+	client := NewClient(APIKey)
+	client.BaseURL = url
+	defer server.Close()
+
+	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		if method := "GET"; method != r.Method {
+			t.Errorf("expected HTTP %v request, got %v", method, r.Method)
+		}
+
+		if url := r.URL.String(); !strings.Contains(url, "/search") {
+			t.Errorf("unexpected URL, got %v", url)
+		}
+
+		fmt.Fprintf(w, `[
+			{
+				"name":"pytest-cookies",
+				"keywords": ["testing", "python", "cookiecutter"]
+			},
+			{
+				"name":"pytest",
+				"keywords": ["testing", "python"]
+			}
+		]`)
+	})
+
+	projects, _, err := client.Search(context.Background(), "pytest")
+
+	if err != nil {
+		t.Fatalf("Search returned unexpected error: %v", err)
+	}
+
+	want := []*Project{
+		&Project{
+			Name: String("pytest-cookies"),
+			Keywords: []*string{
+				String("testing"),
+				String("python"),
+				String("cookiecutter"),
+			},
+		},
+		&Project{
+			Name: String("pytest"),
+			Keywords: []*string{
+				String("testing"),
+				String("python"),
+			},
+		},
+	}
+
+	if !reflect.DeepEqual(projects, want) {
+		t.Errorf("\nExpected %v\nGot %v", repr.Repr(want), repr.Repr(projects))
 	}
 }
