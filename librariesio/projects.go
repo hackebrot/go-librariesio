@@ -102,9 +102,7 @@ func (c *Client) ProjectDeps(ctx context.Context, plat, name, ver string) (*Proj
 //
 // GET https://libraries.io/api/search?q=amelia
 func (c *Client) Search(ctx context.Context, q string) ([]*Project, *http.Response, error) {
-	urlStr := fmt.Sprintf("search")
-
-	request, err := c.NewRequest("GET", urlStr, nil)
+	request, err := c.NewRequest("GET", "search", nil)
 	if err != nil {
 		return nil, nil, err
 	}
