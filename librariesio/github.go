@@ -52,3 +52,27 @@ func (c *Client) User(ctx context.Context, login string) (*User, *http.Response,
 
 	return user, response, nil
 }
+
+// UserProjects returns projects referencing the given GitHub user
+//
+// GET https://libraries.io/api/github/hackebrot/projects
+//
+// login is a user or organization on GitHub
+func (c *Client) UserProjects(ctx context.Context, login string) ([]*Project, *http.Response, error) {
+	urlStr := fmt.Sprintf("github/%v/projects", login)
+
+	request, err := c.NewRequest("GET", urlStr, nil)
+
+	if err != nil {
+		return nil, nil, err
+	}
+
+	var projects []*Project
+
+	response, err := c.Do(ctx, request, &projects)
+	if err != nil {
+		return nil, response, err
+	}
+
+	return projects, response, nil
+}
