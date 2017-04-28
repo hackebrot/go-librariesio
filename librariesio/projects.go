@@ -28,6 +28,9 @@ type Project struct {
 
 	// Dependencies are only populated for ProjectDeps
 	Dependencies []*ProjectDependency `json:"dependencies,omitempty"`
+
+	// RepositoryURL is only populated for UserProjects
+	RepositoryURL *string `json:"repository_url,omitempty"`
 }
 
 // Release represents a release of the project
