@@ -2,6 +2,7 @@
 
 [![GoDoc Reference][godoc_badge]][godoc]
 [![Build Status][travis_badge]][travis]
+[![Report Card][report_card_badge]][report_card]
 
 go-librariesio is a Go client library for accessing the
 [libraries.io][libraries.io] API.
@@ -70,14 +71,16 @@ By participating in this project you agree to abide by its terms.
 Read about why I created **go-librariesio** in this [blog post][blog].
 
 
-[api_key]: https://libraries.io/account
-[api]: https://libraries.io/api
-[blog]: https://raphael.codes/blog/announcing-go-librariesio/
 [Code of Conduct]: CODE_OF_CONDUCT.md
-[contributing]: CONTRIBUTING.md
-[godoc_badge]: https://img.shields.io/badge/go-documentation-blue.svg?style=flat
-[godoc]: https://godoc.org/github.com/hackebrot/go-librariesio/librariesio (See GoDoc Reference)
-[libraries.io]: https://libraries.io/
 [MIT]: LICENSE
-[travis_badge]: https://img.shields.io/travis/hackebrot/go-librariesio.svg?style=flat
+[api]: https://libraries.io/api
+[api_key]: https://libraries.io/account
+[blog]: https://raphael.codes/blog/announcing-go-librariesio/
+[contributing]: CONTRIBUTING.md
+[godoc]: https://godoc.org/github.com/hackebrot/go-librariesio/librariesio (See GoDoc Reference)
+[godoc_badge]: https://img.shields.io/badge/go-documentation-blue.svg?style=flat
+[libraries.io]: https://libraries.io/
+[report_card]: https://goreportcard.com/report/github.com/hackebrot/go-librariesio (See Go Report Card)
+[report_card_badge]: https://goreportcard.com/badge/github.com/hackebrot/go-librariesio
 [travis]: https://travis-ci.org/hackebrot/go-librariesio (See Build Status on Travis CI)
+[travis_badge]: https://img.shields.io/travis/hackebrot/go-librariesio.svg?style=flat
