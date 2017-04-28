@@ -122,7 +122,7 @@ func TestSearch(t *testing.T) {
 	}
 
 	want := []*Project{
-		&Project{
+		{
 			Name: String("pytest-cookies"),
 			Keywords: []*string{
 				String("testing"),
@@ -130,7 +130,7 @@ func TestSearch(t *testing.T) {
 				String("cookiecutter"),
 			},
 		},
-		&Project{
+		{
 			Name: String("pytest"),
 			Keywords: []*string{
 				String("testing"),
