@@ -29,6 +29,53 @@ type User struct {
 	GitHubID     *int       `json:"github_id,omitempty"`
 }
 
+// Repository represents a GitHub project
+type Repository struct {
+	ContributionsCount       *int       `json:"contributions_count,omitempty"`
+	CreatedAt                *time.Time `json:"created_at,omitempty"`
+	DefaultBranch            *string    `json:"default_branch,omitempty"`
+	Description              *string    `json:"description,omitempty"`
+	Fork                     *bool      `json:"fork,omitempty"`
+	ForkPolicy               *string    `json:"fork_policy,omitempty"`
+	ForksCount               *int       `json:"forks_count,omitempty"`
+	FullName                 *string    `json:"full_name,omitempty"`
+	GithubContributionsCount *int       `json:"github_contributions_count,omitempty"`
+	GithubID                 *string    `json:"github_id,omitempty"`
+	HasAudit                 *string    `json:"has_audit,omitempty"`
+	HasChangelog             *string    `json:"has_changelog,omitempty"`
+	HasCoc                   *string    `json:"has_coc,omitempty"`
+	HasContributing          *string    `json:"has_contributing,omitempty"`
+	HasIssues                *bool      `json:"has_issues,omitempty"`
+	HasLicense               *string    `json:"has_license,omitempty"`
+	HasPages                 *bool      `json:"has_pages,omitempty"`
+	HasReadme                *string    `json:"has_readme,omitempty"`
+	HasThreatModel           *string    `json:"has_threat_model,omitempty"`
+	HasWiki                  *bool      `json:"has_wiki,omitempty"`
+	Homepage                 *string    `json:"homepage,omitempty"`
+	HostDomain               *string    `json:"host_domain,omitempty"`
+	HostType                 *string    `json:"host_type,omitempty"`
+	Keywords                 []*string  `json:"keywords,omitempty"`
+	Language                 *string    `json:"language,omitempty"`
+	LastSyncedAt             *time.Time `json:"last_synced_at,omitempty"`
+	License                  *string    `json:"license,omitempty"`
+	LogoURL                  *string    `json:"logo_url,omitempty"`
+	MirrorURL                *string    `json:"mirror_url,omitempty"`
+	Name                     *string    `json:"name,omitempty"`
+	OpenIssuesCount          *int       `json:"open_issues_count,omitempty"`
+	Private                  *bool      `json:"private,omitempty"`
+	PullRequestsEnabled      *bool      `json:"pull_requests_enabled,omitempty"`
+	PushedAt                 *time.Time `json:"pushed_at,omitempty"`
+	Rank                     *int       `json:"rank,omitempty"`
+	Scm                      *string    `json:"scm,omitempty"`
+	Size                     *int       `json:"size,omitempty"`
+	SourceName               *string    `json:"source_name,omitempty"`
+	StargazersCount          *int       `json:"stargazers_count,omitempty"`
+	Status                   *string    `json:"status,omitempty"`
+	SubscribersCount         *int       `json:"subscribers_count,omitempty"`
+	UUID                     *string    `json:"uuid,omitempty"`
+	UpdatedAt                *time.Time `json:"updated_at,omitempty"`
+}
+
 // User returns information for a given user or organization
 //
 // GET https://libraries.io/api/github/hackebrot
