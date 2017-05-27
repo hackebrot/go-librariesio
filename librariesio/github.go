@@ -123,3 +123,26 @@ func (c *Client) UserProjects(ctx context.Context, login string) ([]*Project, *h
 
 	return projects, response, nil
 }
+
+// UserRepositories returns repositories owned by the given GitHub user
+//
+// GET https://libraries.io/api/github/hackebrot/repositories
+//
+// login is a user or organization on GitHub
+func (c *Client) UserRepositories(ctx context.Context, login string) ([]*Repository, *http.Response, error) {
+	urlStr := fmt.Sprintf("github/%v/repositories", login)
+
+	request, err := c.NewRequest("GET", urlStr, nil)
+
+	if err != nil {
+		return nil, nil, err
+	}
+	var repos []*Repository
+
+	response, err := c.Do(ctx, request, &repos)
+	if err != nil {
+		return nil, response, err
+	}
+
+	return repos, response, nil
+}
