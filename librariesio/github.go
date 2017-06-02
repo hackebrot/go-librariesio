@@ -78,7 +78,7 @@ type Repository struct {
 
 // User returns information for a given user or organization
 //
-// GET https://libraries.io/api/github/hackebrot
+// GET https://libraries.io/api/github/:login
 //
 // login is a user or organization on GitHub
 func (c *Client) User(ctx context.Context, login string) (*User, *http.Response, error) {
@@ -102,7 +102,7 @@ func (c *Client) User(ctx context.Context, login string) (*User, *http.Response,
 
 // UserProjects returns projects referencing the given GitHub user
 //
-// GET https://libraries.io/api/github/hackebrot/projects
+// GET https://libraries.io/api/github/:login/projects
 //
 // login is a user or organization on GitHub
 func (c *Client) UserProjects(ctx context.Context, login string) ([]*Project, *http.Response, error) {
@@ -126,7 +126,7 @@ func (c *Client) UserProjects(ctx context.Context, login string) ([]*Project, *h
 
 // UserRepositories returns repositories owned by the given GitHub user
 //
-// GET https://libraries.io/api/github/hackebrot/repositories
+// GET https://libraries.io/api/github/:login/repositories
 //
 // login is a user or organization on GitHub
 func (c *Client) UserRepositories(ctx context.Context, login string) ([]*Repository, *http.Response, error) {
