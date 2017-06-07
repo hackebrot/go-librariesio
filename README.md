@@ -10,7 +10,7 @@ go-librariesio is a Go client library for accessing the
 
 ## Installation
 
-``go get github.com/hackebrot/go-librariesio``
+``go get github.com/hackebrot/go-librariesio/librariesio``
 
 
 ## libraries.io API
